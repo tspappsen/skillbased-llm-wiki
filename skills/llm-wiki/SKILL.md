@@ -78,7 +78,7 @@ wiki/index.md + wiki/log.md present at wiki root?
       └── _hub.md        # Compressed digest of all insights (routing aid)
 ```
 
-At a glance: `<wiki-root>/` has **`AGENTS.md`** (editable domain schema), **`CLAUDE.md`** (thin file that imports `@AGENTS.md` for [Claude Code](https://code.claude.com/docs/en/memory#agents-md)), `assets/`, `raw/` (including auto-managed `files.log`), and `wiki/` with `index.md`, `log.md`, `overview.md`, plus `summaries/`, `concepts/`, `entities/`, `insights/`.
+At a glance: `<wiki-root>/` has **`AGENTS.md`** (editable domain schema), `assets/`, `raw/` (including auto-managed `files.log`), and `wiki/` with `index.md`, `log.md`, `overview.md`, plus `summaries/`, `concepts/`, `entities/`, `insights/`.
 
 ## Tooling
 

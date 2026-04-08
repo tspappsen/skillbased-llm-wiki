@@ -32,7 +32,7 @@ wiki/insights/
 
 Create empty `_hub.md` stub files in each category folder using [templates/hub.md](../templates/hub.md) (they will be populated during ingest as the wiki grows).
 
-### 3. Starter Files (AGENTS.md, CLAUDE.md, index, log, overview)
+### 3. Starter Files (AGENTS.md, index, log, overview)
 
 Create these files directly:
 
@@ -93,7 +93,7 @@ updated: <today>
 *Populated as pages as they are created.*
 ```
 
-Edit **AGENTS.md** for schema changes. Keep **`CLAUDE.md`** thin and import-based.
+Edit **AGENTS.md** for schema changes.
 
 ### 4. Initialize raw/files.log
 

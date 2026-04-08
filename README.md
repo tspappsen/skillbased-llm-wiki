@@ -48,7 +48,6 @@ After INIT, your project looks like this:
 ```
 wiki/integration-platform/
 ├── AGENTS.md           # Domain schema (editable)
-├── CLAUDE.md           # Thin import of AGENTS.md for Claude Code
 ├── assets/             # Images, PDFs
 ├── raw/                # Your source documents (never modified by the agent)
 │   └── files.log       # Auto-managed file inventory
