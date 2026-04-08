@@ -18,6 +18,8 @@ Read index.md, overview.md, and all files in summaries/, concepts/, entities/, i
 - All `sources` listed in frontmatter
 - Inbound link count per page
 
+**Large wiki (50+ pages):** process in batches of ~30 pages per pass (see [scale.md](scale.md)). Complete all deterministic checks for one batch before moving to the next. Track progress so you can resume if interrupted.
+
 ### 2. Deterministic Checks (Auto-Fix)
 
 Fix these automatically without asking:
@@ -73,6 +75,11 @@ Report these findings without auto-fixing. Let the user decide:
 - Insight pages whose cited source pages (in frontmatter `sources`) have been substantially updated since the insight was created
 - Compare the insight's `updated` date against the `updated` dates of its cited pages
 - If any cited page was updated after the insight, flag it as potentially outdated
+
+**Stale or missing hubs** (50+ page wikis only)
+- Each category folder should have a `_hub.md`; flag any that are missing
+- Compare each hub's `updated` date against the latest `updated` date of pages in its category
+- If pages were created or updated after the hub, flag it for rebuild
 
 ### 4. Write Lint Report
 

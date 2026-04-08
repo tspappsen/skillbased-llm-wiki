@@ -20,7 +20,13 @@ Scan `wiki/index.md` to identify relevant pages by topic, tags, and summaries.
 
 ### 2. Read Relevant Pages
 
-Read identified pages in full. Follow one level of `[[wikilinks]]` if they point to pages relevant to the question.
+**Small wiki (<50 pages):** Read identified pages in full. Follow one level of `[[wikilinks]]` if they point to pages relevant to the question.
+
+**Large wiki (50+ pages):** Use **tiered reading** per [scale.md](scale.md):
+1. Scan `index.md` — match the query against Tags and Summary columns to build a candidate list
+2. If candidates span many pages in one category, read that category's `_hub.md` first to triage
+3. Read individual pages from the narrowed candidate list (aim for ≤15 pages)
+4. Follow one hop of `[[wikilinks]]` only for links that also appeared in the candidate list or are clearly critical
 
 ### 3. Synthesize Answer
 

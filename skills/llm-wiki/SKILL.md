@@ -34,6 +34,7 @@ Decompose the request into an **ordered list of steps**. Each step = a single pr
 | **UPDATE** | User wants edits, corrections, or merges on existing pages | [references/update.md](references/update.md) |
 | **LINT** | “Lint”, health check, gaps, inconsistencies, optional raw vs `files.log` drift | [references/lint.md](references/lint.md) |
 | **RAW TRACKING** | Any step that inspects, syncs, or reconciles `raw/files.log` | [references/raw-tracking.md](references/raw-tracking.md) |
+| **SCALE** | Wiki has 50+ pages; need tiered reads, hubs, or scoped cascades | [references/scale.md](references/scale.md) |
 
 One message can imply several steps (e.g. INGEST then LINT). Order them sensibly—often INIT first if missing, then INGEST / UPDATE / QUERY, and LINT when checking health after substantive changes.
 
@@ -43,6 +44,7 @@ One message can imply several steps (e.g. INGEST then LINT). Order them sensibly
 wiki/index.md + wiki/log.md present at wiki root?
 ├─ No → INIT → references/init.md
 ├─ Yes →
+│   ├─ 50+ pages in index.md? → read references/scale.md before any operation below
 │   ├─ New/changed raw/, or paste/URL to capture? → INGEST → references/ingest.md
 │   ├─ Domain question grounded in the wiki? → QUERY → references/query.md
 │   ├─ "lint" / health check / find gaps? → LINT → references/lint.md
@@ -63,13 +65,17 @@ wiki/index.md + wiki/log.md present at wiki root?
 │   ├── files.log          # Auto-generated file inventory (name + date)
 │   └── ...
 └── wiki/
-  ├── index.md           # Content catalog — every page with link + one-line summary
+  ├── index.md           # Content catalog — every page with link, summary, and tags
   ├── log.md             # Append-only chronological operation log
   ├── overview.md        # High-level evolving synthesis across all sources
   ├── summaries/         # Source summaries (can merge multiple raw files on same topic)
+  │   └── _hub.md        # Compressed digest of all summaries (routing aid)
   ├── concepts/          # Concept pages
+  │   └── _hub.md        # Compressed digest of all concepts (routing aid)
   ├── entities/          # Entity pages (people, tools, orgs, products)
+  │   └── _hub.md        # Compressed digest of all entities (routing aid)
   └── insights/          # Valuable query results and cross-page analyses
+      └── _hub.md        # Compressed digest of all insights (routing aid)
 ```
 
 At a glance: `<wiki-root>/` has **`AGENTS.md`** (editable domain schema), **`CLAUDE.md`** (thin file that imports `@AGENTS.md` for [Claude Code](https://code.claude.com/docs/en/memory#agents-md)), `assets/`, `raw/` (including auto-managed `files.log`), and `wiki/` with `index.md`, `log.md`, `overview.md`, plus `summaries/`, `concepts/`, `entities/`, `insights/`.
@@ -92,7 +98,8 @@ Page templates are in `templates/` — read the relevant template before creatin
 - [templates/concept.md](templates/concept.md) — concept pages
 - [templates/entity.md](templates/entity.md) — entity pages
 - [templates/insight.md](templates/insight.md) — insights (point-in-time snapshots, NOT cascade-updated)
-- [templates/index.md](templates/index.md) — index table format
+- [templates/index.md](templates/index.md) — index table format (includes Tags column for routing)
+- [templates/hub.md](templates/hub.md) — category hub summaries (scaling aid)
 
 Common rules:
 - Use `[[wikilinks]]` with plain filenames — no paths (e.g., `[[rag]]` not `[[concepts/rag]]`)
@@ -112,6 +119,7 @@ Common rules:
 7. **Insights are snapshots** — not cascade-updated; add reverse links in See Also (Obsidian backlinks invisible to LLM)
 8. **Schema co-evolves** — suggest AGENTS.md changes; user confirms; log records
 9. **Keep `raw/files.log` correct** using [references/raw-tracking.md](references/raw-tracking.md)
+10. **Scale with tiered reads** — at 50+ pages, use index tags and hub summaries instead of full scans; see [references/scale.md](references/scale.md)
 
 ## Tips for Users
 

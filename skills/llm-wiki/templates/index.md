@@ -2,24 +2,24 @@
 
 ## Summaries
 
-| Page | Summary | Updated |
-|------|---------|---------|
-| [[<slug>]] | <one-line summary> | <YYYY-MM-DD> |
+| Page | Summary | Tags | Updated |
+|------|---------|------|---------|
+| [[<slug>]] | <one-line summary> | <tag1, tag2, ...> | <YYYY-MM-DD> |
 
 ## Concepts
 
-| Page | Summary | Updated |
-|------|---------|---------|
-| [[<slug>]] | <one-line summary> | <YYYY-MM-DD> |
+| Page | Summary | Tags | Updated |
+|------|---------|------|---------|
+| [[<slug>]] | <one-line summary> | <tag1, tag2, ...> | <YYYY-MM-DD> |
 
 ## Entities
 
-| Page | Summary | Updated |
-|------|---------|---------|
-| [[<slug>]] | <one-line summary> | <YYYY-MM-DD> |
+| Page | Summary | Tags | Updated |
+|------|---------|------|---------|
+| [[<slug>]] | <one-line summary> | <tag1, tag2, ...> | <YYYY-MM-DD> |
 
 ## Insights
 
-| Page | Summary | Updated |
-|------|---------|---------|
-| [[<slug>]] | <one-line summary> | <YYYY-MM-DD> |
+| Page | Summary | Tags | Updated |
+|------|---------|------|---------|
+| [[<slug>]] | <one-line summary> | <tag1, tag2, ...> | <YYYY-MM-DD> |

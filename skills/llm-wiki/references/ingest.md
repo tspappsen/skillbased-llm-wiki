@@ -85,12 +85,21 @@ This is the most commonly skipped step. A compounding wiki's value comes from bi
 
 ### 6. Cascade Update
 
-After direct operations, scan the entire wiki for pages that may be affected by the new information:
+After direct operations, identify and update existing pages affected by the new information.
 
-1. Read through all pages in summaries/, concepts/, entities/, insights/
-2. For each page, assess whether the new source changes, contradicts, or supplements its content
-3. **Pages are not bound to specific raw files** — a source named "rag.md" may affect pages about fine-tuning, langchain, or any related topic
-4. Categorize findings:
+**Small wiki (<50 pages):** scan all pages in summaries/, concepts/, entities/, insights/.
+
+**Large wiki (50+ pages):** use **scoped cascade** per [scale.md](scale.md):
+1. Extract the key tags and entities from the new source
+2. Scan `index.md` Tags columns — select pages whose tags overlap with the new content
+3. Add pages that are directly `[[wikilinked]]` from newly created/updated pages
+4. Read only those matched pages (~20 page budget)
+5. If more pages potentially match than the budget allows, flag the remainder: "These pages may also be affected — consider running LINT to catch anything missed"
+
+For each page read (either method):
+1. Assess whether the new source changes, contradicts, or supplements its content
+2. **Pages are not bound to specific raw files** — a source named "rag.md" may affect pages about fine-tuning, langchain, or any related topic
+3. Categorize findings:
    - **Certain updates** → apply directly
    - **Uncertain** → list them and ask the user for guidance
 
@@ -107,11 +116,15 @@ After direct operations, scan the entire wiki for pages that may be affected by 
   - Cascade: <cascade-updated page>
   ```
 
-### 8. Update raw/files.log
+### 8. Update Hub Summaries
+
+If the wiki has 50+ pages, update the `_hub.md` file for each category where pages were created or substantially changed. See [templates/hub.md](../templates/hub.md) for format and [scale.md](scale.md) for guidelines. Keep each hub under ~2 000 tokens.
+
+### 9. Update raw/files.log
 
 **Required:** read [raw-tracking.md](raw-tracking.md) and refresh `raw/files.log` using that procedure.
 
-### 9. Report to User
+### 10. Report to User
 
 - Summary page written/updated
 - Concept/entity pages created or updated (list)

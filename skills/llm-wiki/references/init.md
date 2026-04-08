@@ -30,6 +30,8 @@ wiki/entities/
 wiki/insights/
 ```
 
+Create empty `_hub.md` stub files in each category folder using [templates/hub.md](../templates/hub.md) (they will be populated during ingest as the wiki grows).
+
 ### 3. Starter Files (AGENTS.md, CLAUDE.md, index, log, overview)
 
 Create these files directly:

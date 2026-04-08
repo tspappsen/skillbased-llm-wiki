@@ -17,7 +17,7 @@ cp -r skills/llm-wiki /path/to/project/.github/skills/
 
 **Create a wiki:**
 ```
-Init a wiki at wiki/greek-history for Greek history
+Init a wiki at wiki/integration-platform for Azure integration services, D365 CRM, and agentic workflows
 ```
 
 **Add a source** (file, paste, or URL):
@@ -31,7 +31,7 @@ Add this to the wiki:
 
 **Ask a question** (answered from wiki content, not general knowledge):
 ```
-What do we know about the Peloponnesian War?
+What are the retry differences between Service Bus and Logic Apps?
 ```
 
 **Fix things:**
@@ -46,20 +46,24 @@ That's it. The agent reads `SKILL.md`, figures out which operation to run (INIT,
 After INIT, your project looks like this:
 
 ```
-wiki/greek-history/
+wiki/integration-platform/
 ├── AGENTS.md           # Domain schema (editable)
 ├── CLAUDE.md           # Thin import of AGENTS.md for Claude Code
 ├── assets/             # Images, PDFs
 ├── raw/                # Your source documents (never modified by the agent)
 │   └── files.log       # Auto-managed file inventory
 └── wiki/
-    ├── index.md        # Catalog of every page
+    ├── index.md        # Catalog of every page (with tags for routing)
     ├── log.md          # Append-only operation log
     ├── overview.md     # Evolving high-level synthesis
     ├── summaries/      # Per-source summaries
+    │   └── _hub.md     # Category digest (scaling aid)
     ├── concepts/       # Concept pages
+    │   └── _hub.md
     ├── entities/       # People, tools, orgs
+    │   └── _hub.md
     └── insights/       # Saved query results and analyses
+        └── _hub.md
 ```
 
 Sources go in `raw/`. The agent writes everything under `wiki/`. You curate sources and ask questions; the agent does the rest.
@@ -77,9 +81,11 @@ skills/llm-wiki/
 │   ├── query.md
 │   ├── update.md
 │   ├── lint.md
-│   └── raw-tracking.md
+│   ├── raw-tracking.md
+│   └── scale.md          # Tiered reading strategy for large wikis
 └── templates/            # Starter page shapes
     ├── index.md
+    ├── hub.md             # Category hub digest template
     ├── concept.md
     ├── entity.md
     ├── insight.md
@@ -100,8 +106,8 @@ AI will:
 1. Read each source in full
 2. Create or update pages in `summaries/`, `concepts/`, `entities/`
 3. Run a backlink audit — add `[[wikilinks]]` across existing pages
-4. Scan the entire wiki for pages affected by the new information (cascade update)
-5. Update `index.md`, `overview.md`, and `log.md`
+4. Cascade update — scan for affected pages (scoped by tag overlap in large wikis)
+5. Update `index.md`, `overview.md`, `log.md`, and category hub summaries
 6. Sync `raw/files.log` directly using the skill's raw-tracking rules
 
 **Note:** AI Agent proceeds autonomously. It only asks you when something is genuinely unclear or when 1-3 brief questions would materially improve curation during ingest. Those answers are treated as curation guidance, not as source facts.
@@ -109,15 +115,15 @@ AI will:
 ### 3. Ask Questions (QUERY)
 
 ```
-What do we know about the Peloponnesian War?
+What are the retry differences between Service Bus and Logic Apps?
 ```
 
 ```
-Compare Athenian and Spartan military strategies across all sources
+Compare dual-write vs virtual entities for D365-to-Dataverse sync
 ```
 
 ```
-What are the unresolved questions about the fall of Mycenaean civilization?
+What patterns do we have for agent-to-agent handoff in durable orchestrations?
 ```
 
 AI answers strictly from wiki content, citing pages with `[[wikilinks]]`. After answering, it may:
@@ -129,11 +135,11 @@ AI answers strictly from wiki content, citing pages with `[[wikilinks]]`. After 
 #### User-triggered (you ask for changes)
 
 ```
-Update concepts/democracy.md — the latest source says X
+Update concepts/dual-write.md — the latest source says X
 ```
 
 ```
-Fix the contradiction between concepts/oligarchy.md and concepts/democracy.md
+Fix the contradiction between concepts/service-bus.md and concepts/event-grid.md on message ordering
 ```
 
 Agent shows a diff for each page and waits for your confirmation before writing.
@@ -187,3 +193,15 @@ If no hash tool is available, the skill falls back to `new` and `deleted` detect
 - **Dataview** plugin lets you query pages by type, tags, or date
 - You never write wiki pages yourself — AI handles all the maintenance
 - **One wiki per repo.** If you need multiple knowledge bases, use separate git repos. Each gets its own skill copy, schema, and history.
+
+## Scaling
+
+The skill works by full-read at small sizes and switches to **tiered reading** at ~50+ pages — no embeddings or external search infrastructure needed.
+
+| Tier | What it reads | Cost |
+|------|--------------|------|
+| **0 — Index scan** | `index.md` tags + summaries | ~15K tokens at 500 pages |
+| **1 — Hub summaries** | `_hub.md` per category folder | ~2K tokens each |
+| **2 — Targeted pages** | Only pages matched by Tier 0/1 | ≤15–20 pages per operation |
+
+This keeps token usage bounded even as the wiki grows to hundreds of pages. Cascade updates during ingest are scoped by tag overlap instead of full scans, and lint processes pages in batches.
