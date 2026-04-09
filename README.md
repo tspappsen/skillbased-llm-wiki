@@ -6,6 +6,8 @@ A skill that turns an AI coding agent into a wiki curator. You supply sources; t
 
 There is nothing to install. This repo is a single agent skill — a set of markdown instructions the agent reads at runtime.
 
+Predictability comes from tighter markdown contracts, not from runtime tooling. The skill stays markdown-only: exact templates, exact file formats, and explicit reference steps are the mechanism.
+
 ### 1. Copy the skill into your project
 
 ```bash
@@ -91,7 +93,7 @@ skills/llm-wiki/
     └── summary.md
 ```
 
-`SKILL.md` tells the agent: read the user's message, check if a wiki exists, then open the right reference file and follow it step by step. The reference files are detailed enough that the agent produces consistent output without improvising structure.
+`SKILL.md` tells the agent: read the user's message, check if a wiki exists, then open the right reference file and follow it step by step. The reference files and templates are the contract: exact frontmatter fields, exact section headings, exact index rows, and exact `raw/files.log` format.
 
 Key design choices:
 - **`raw/` is immutable** — the agent never modifies source documents
@@ -168,13 +170,13 @@ Writes a lint report to `insights/lint-<date>.md` and offers fixes for heuristic
 Any new files in raw/?
 ```
 
-Agent inspects this directly from `raw/` and `raw/files.log`. When native hashing is available, use it; for example in PowerShell:
+Agent inspects this directly from `raw/` and `raw/files.log`.
 
-```powershell
-Get-FileHash .\raw\karpathy-llm-wiki.md -Algorithm SHA256 | Select-Object -ExpandProperty Hash
-```
+Official behavior is intentionally narrow:
+- `new` means a top-level file exists in `raw/` but not in `raw/files.log`
+- `deleted` means a file listed in `raw/files.log` no longer exists in `raw/`
 
-If no hash tool is available, the skill falls back to `new` and `deleted` detection and may skip `modified` detection.
+Modified-file detection is not part of the skill.
 
 ## Daily Workflow
 

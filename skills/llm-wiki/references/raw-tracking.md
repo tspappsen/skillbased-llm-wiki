@@ -6,7 +6,7 @@ Read this reference before any step that checks drift, refreshes `files.log`, or
 
 ## Scope
 
-`raw/files.log` is a plain inventory of the files in `raw/`. No hashing, no fingerprinting — just filenames and dates.
+`raw/files.log` is a plain inventory of the files in `raw/`. No hashing, no fingerprinting, no modified-file detection — just filenames and dates.
 
 Rules:
 
@@ -28,6 +28,8 @@ Then one line per tracked file, sorted by filename:
 ```text
 <filename> | <YYYY-MM-DD>
 ```
+
+Use the current date in `YYYY-MM-DD` format. Do not include a time, timezone, hash, size, or status column.
 
 ## Sync Procedure
 
@@ -51,6 +53,14 @@ Use this when the user asks whether `raw/` changed, or when LINT checks for drif
 5. Do not write anything during status
 
 If there are no differences, report that no changes were detected.
+
+Use this exact status shape:
+
+```text
+Raw drift:
+- new: <comma-separated filenames or none>
+- deleted: <comma-separated filenames or none>
+```
 
 ## Reconciliation Rules
 

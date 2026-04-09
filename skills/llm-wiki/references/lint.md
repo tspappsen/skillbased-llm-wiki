@@ -31,19 +31,26 @@ Fix these automatically without asking:
   - Zero or multiple matches → report to user
 
 **Missing frontmatter**
-- Pages without required fields: title, type, tags, sources, updated
-- Add missing fields with placeholder values
+- Pages without the required fields for their template
+- Common required fields for all page types: `title`, `type`, `tags`, `sources`, `updated`
+- Type-specific required fields: `extraction_rationale` for summaries, `status` for insights
+- Add missing fields with placeholder values and preserve the canonical field order from `SKILL.md`
+
+**Missing required headings**
+- Pages whose body does not include the headings required by their template
+- Add only the missing headings with placeholder content; do not rewrite existing synthesis
 
 **Index inconsistencies**
 - File exists in wiki/ but missing from index.md → add entry with "(no summary)" placeholder
 - Index entry points to nonexistent file → mark as `[MISSING]`
+- Within each category section, keep rows alphabetically sorted by page slug after fixing
 
 **Broken raw references**
 - Links in `sources` frontmatter pointing to nonexistent raw/ files
 - Search raw/ for file with same name → fix if exactly one match, report otherwise
 
 **Raw vs files.log drift (optional)**
-- Read [raw-tracking.md](raw-tracking.md) and run the status procedure to report `new`, `modified`, and `deleted` files without writing
+- Read [raw-tracking.md](raw-tracking.md) and run the status procedure to report `new` and `deleted` files without writing
 - If there is drift, reconcile (ingest or rewrite `raw/files.log` after confirming `raw/` is correct)
 
 ### 3. Heuristic Checks (Report Only)
@@ -100,6 +107,7 @@ Flag entries that say "this contradicts X" without specifying what claim is cont
 
 Always write `insights/lint-<today>.md` using [templates/insight.md](../templates/insight.md) as base, with:
 - `tags: [insight, lint, maintenance]`
+- `sources: []`
 - Body structured as: Summary (counts) → Auto-Fixed (list) → Needs Attention (categorized findings)
 
 Add the lint report to index.md under Insights (table format per [templates/index.md](../templates/index.md)).

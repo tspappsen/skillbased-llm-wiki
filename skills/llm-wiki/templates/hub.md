@@ -2,8 +2,12 @@
 title: "<Category> — Hub"
 type: hub
 tags: [hub, <category>]
+sources: []
 updated: <YYYY-MM-DD>
 ---
+
+<!-- Required frontmatter order: title, type, tags, sources, updated -->
+<!-- Required headings: ## Key Themes, ## Notable Relationships, ## Open Threads, ## All Pages -->
 
 # <Category> Hub
 

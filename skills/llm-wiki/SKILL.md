@@ -2,8 +2,7 @@
 name: llm-wiki
 description: "Use this skill whenever work is wiki- or knowledge-base-shaped—especially if the user says wiki, knowledge base, vault notes, or raw/ in this project. Trigger on words such as `ingest wiki`, `add to wiki`, `init wiki`, or `lint wiki`, updating or revising wiki pages, and on domain-specific questions that should be answered from the wiki (what we know about X, compare A and B, gaps, contradictions)—not off-wiki trivia. Do not use for generic chat, unrelated code or tooling, or file operations with no wiki intent."
 metadata:
-  author: hsuanguo
-  version: "1.0"
+  version: "1.2"
 ---
 
 # LLM Wiki
@@ -20,6 +19,7 @@ Infer **intent** from the user’s message (bootstrap, ingest, answer from the w
 
 - Whether a wiki already exists at the target root (`wiki/index.md` and `wiki/log.md`).
 - If it exists: skim `wiki/index.md`, tail `wiki/log.md`, and inspect `raw/` when ingest, drift, or new sources matter.
+- Treat raw drift as filename inventory only: compare top-level files in `raw/` against `raw/files.log` for `new` and `deleted` entries only.
 - If uncertain about the wiki tree or `raw/files.log`, read the dedicated references in this skill before proceeding.
 
 ### 2. Map intention to one or more steps
@@ -82,7 +82,7 @@ At a glance: `<wiki-root>/` has **`AGENTS.md`** (editable domain schema), `asset
 
 ## Tooling
 
-No external runtime is required. Use normal file tools to create the tree and maintain `raw/files.log` as a plain file inventory per [references/raw-tracking.md](references/raw-tracking.md).
+No external runtime is required or assumed. This skill stays markdown-only. Improve predictability by following the exact templates and reference procedures rather than introducing script-specific behavior.
 
 | Action | Method |
 |--------|--------|
@@ -90,6 +90,17 @@ No external runtime is required. Use normal file tools to create the tree and ma
 | Bootstrap files + dirs | Create the tree and starter files directly |
 | Refresh `raw/files.log` | Follow [references/raw-tracking.md](references/raw-tracking.md) |
 | Report drift (no write) | Follow [references/raw-tracking.md](references/raw-tracking.md) |
+
+## Deterministic Markdown Contract
+
+Use these rules exactly when creating or repairing wiki files:
+
+- Dates use `YYYY-MM-DD` with no time component.
+- Frontmatter field order is `title`, `type`, `tags`, `sources`, `updated`, then any type-specific fields.
+- `raw/files.log` tracks only top-level filenames in `raw/`; drift reports only `new` and `deleted`.
+- `wiki/index.md` keeps one row per page in the correct category section, sorted alphabetically by page slug.
+- `wiki/log.md` is append-only and uses the exact heading format `## [YYYY-MM-DD] <operation> | <title>`.
+- Required section headings come from the page templates and should not be renamed.
 
 ## Page Conventions
 
@@ -107,6 +118,7 @@ Common rules:
 - Every page ends with a `## See Also` section for cross-references
 - Slugs: lowercase, hyphen-separated (e.g., `attention-mechanism.md`)
 - Raw files: no date prefix in filename; dates tracked via frontmatter
+- Summary, concept, entity, insight, and hub pages must match their template frontmatter and heading structure exactly
 
 ## Key Rules
 

@@ -16,7 +16,9 @@ Wiki must be initialized (`wiki/index.md` and `wiki/log.md` exist). If not, run 
 - **URL** → fetch content; save to `raw/<slug>.md`
 - **Pasted text** → save to `raw/<slug>.md`
 
-Slug format: lowercase, hyphens, no special characters. Example: "Attention Is All You Need" → `attention-is-all-you-need.md`
+Slug format is exact: lowercase letters and digits separated by single hyphens, with `.md` extension. Regex: `^[a-z0-9]+(?:-[a-z0-9]+)*\.md$`
+
+Example: "Attention Is All You Need" → `attention-is-all-you-need.md`
 
 ### 2. Read in Full
 
@@ -128,8 +130,10 @@ For each page read (either method):
 ### 7. Update Overview, Index, Log
 
 - **overview.md** → update if the source shifts the big picture, adds key entities/concepts, or raises new open questions
-- **index.md** → add entries for new pages, update summaries for modified pages
+- **index.md** → add entries for new pages, update summaries for changed pages
 - **index.md** → use table format per [templates/index.md](../templates/index.md)
+- **index.md** → keep exactly one row per page and sort rows alphabetically by page slug within each category section
+- **index.md** → tags are lowercase and comma-separated inside the Tags column; if a page has no one-line summary yet, use `(no summary)`
 - **log.md** → append:
   ```
   ## [YYYY-MM-DD] ingest | <source title>
@@ -138,15 +142,19 @@ For each page read (either method):
   - Cascade: <cascade-updated page>
   ```
 
+If a list is empty, write `none` rather than omitting the line.
+
 ### 8. Update Hub Summaries
 
 If the wiki has 50+ pages, update the `_hub.md` file for each category where pages were created or substantially changed. See [templates/hub.md](../templates/hub.md) for format and [scale.md](scale.md) for guidelines. Keep each hub under ~2 000 tokens.
 
 ### 9. Update raw/files.log
 
-**Required:** read [raw-tracking.md](raw-tracking.md) and refresh `raw/files.log` using that procedure.
+**Required:** read [raw-tracking.md](raw-tracking.md) and refresh `raw/files.log` using that procedure. This tracks filename inventory only; do not infer or report modified files.
 
 ### 10. Report to User
+
+Use this exact report shape:
 
 - Summary page written/updated
 - Concept/entity pages created or updated (list)

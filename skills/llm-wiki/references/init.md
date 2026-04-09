@@ -55,10 +55,15 @@ Create these files directly:
 - This schema co-evolves with use — suggest changes when conventions need updating
 ```
 
+- **`wiki/index.md`** — create it from [templates/index.md](../templates/index.md). Keep all four category sections even when empty. Within each section, rows are sorted alphabetically by page slug.
+
+- **`wiki/log.md`** — exact starter content:
+
+```md
 # Wiki Log
 
 Append-only. Format: `## [YYYY-MM-DD] <operation> | <title>`
-Quick view: `grep "^## \[" log.md | tail -10`
+Quick view: list the latest headings from this file.
 
 ---
 
@@ -94,6 +99,8 @@ updated: <today>
 ```
 
 Edit **AGENTS.md** for schema changes.
+
+Use `YYYY-MM-DD` for every starter date. Do not add optional fields or alternate headings during INIT.
 
 ### 4. Initialize raw/files.log
 

@@ -7,6 +7,9 @@ updated: <today>
 extraction_rationale: "<1-line: why this earns a page — which filter tests it passed>"
 ---
 
+<!-- Required frontmatter order: title, type, tags, sources, updated, extraction_rationale -->
+<!-- Required headings: ## Essence, ## Delta, ## Tensions, ## Implications, ## Open Threads, ## See Also -->
+
 # <Topic>
 
 > <1-2 sentence essence: what this is, in the wiki's own language — not the source's words>

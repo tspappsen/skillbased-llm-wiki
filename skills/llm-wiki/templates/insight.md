@@ -1,10 +1,14 @@
 ---
 title: <insight title>
 type: insight
-date: <YYYY-MM-DD>
+tags: [insight, <topic tags>]
 sources: [[[page-slug-1]], [[page-slug-2]]]
+updated: <YYYY-MM-DD>
 status: open | actioned | superseded
 ---
+
+<!-- Required frontmatter order: title, type, tags, sources, updated, status -->
+<!-- Required headings: ## The Connection, ## Why It Matters, ## Implications, ## Open Questions, ## See Also -->
 
 # <Insight Title>
 

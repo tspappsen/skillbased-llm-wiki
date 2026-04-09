@@ -6,6 +6,9 @@ sources: [raw/<file1>.md]
 updated: <today>
 ---
 
+<!-- Required frontmatter order: title, type, tags, sources, updated -->
+<!-- Required headings: ## Overview, ## Key Facts, ## Appearances, ## See Also -->
+
 # <Entity Name>
 
 <1-2 sentence description.>
