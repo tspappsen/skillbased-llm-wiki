@@ -27,6 +27,7 @@ Read all content. For long sources, read in sections. Do not skip.
 After reading the source:
 - Identify key takeaways, entities, and concepts
 - Check whether it contradicts anything already in the wiki (read index.md + relevant pages)
+- When contradictions are found, note the specific claim in the existing page and the specific claim in the new source. Use the structured format from [templates/summary.md](../templates/summary.md#tensions) — do not write vague "this contradicts X" statements.
 - Proceed to write/update pages based on your assessment
 
 ### 3.1 Filter Before Writing
@@ -121,6 +122,8 @@ For each page read (either method):
 3. Categorize findings:
    - **Certain updates** → apply directly
    - **Uncertain** → list them and ask the user for guidance
+
+**Open Thread resolution:** If any existing wiki page has an Open Thread that this source resolves, do not just update the page — promote the resolution to a new insight page in `insights/`. An insight page captures synthesis that only exists because multiple sources were read together. Use [templates/insight.md](../templates/insight.md) for format.
 
 ### 7. Update Overview, Index, Log
 
