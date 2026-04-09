@@ -18,7 +18,11 @@ What this is, stated in terms of what the wiki already knows. Reframe using exis
 What this source adds that the wiki did not already know. Be specific. If delta is thin, reconsider whether this page should exist (see extraction_rationale). Do not restate content already in existing wiki pages — link to them instead.
 
 ## Tensions
-Where this contradicts, complicates, or nuances existing wiki content. Cite specific pages with `[[wikilinks]]`. "None identified" is valid but should be rare for non-trivial sources. If contradictions exist, annotate with source attribution — do not silently overwrite.
+Where this contradicts, complicates, or nuances existing wiki content. Each tension must be structured as:
+
+> `[[page-slug]]` claims **X**. This source claims **Y**. [Source: `raw/filename.md`, §Section heading]
+
+"None identified" is valid but should be rare for non-trivial sources. Do not silently overwrite conflicting content — annotate with attribution. These entries enable LINT to verify the cited claims haven't gone stale.
 
 ## Implications
 What changes downstream as a result of this knowledge. Which decisions, mental models, or other wiki pages are affected. Pages that may need updating should be listed here and cascade-updated per INGEST Step 6.

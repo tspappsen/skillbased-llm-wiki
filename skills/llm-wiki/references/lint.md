@@ -79,6 +79,13 @@ Check summary pages for missing `extraction_rationale` frontmatter. Pages withou
 
 Check summary pages for old-format bodies (pages with `## Key Takeaways` or `## Details` sections instead of `## Essence` / `## Delta`). These predate the extraction frame — flag them for UPDATE but don't auto-rewrite (requires reading existing wiki context to fill Delta and Tensions meaningfully).
 
+### Unstructured Tensions Entries
+
+Check summary pages where `## Tensions` contains entries that don't follow the structured format:
+`[[page]]` claims **X**. This source claims **Y**. [Source: `raw/file.md`, §section]
+
+Flag entries that say "this contradicts X" without specifying what claim is contradicted or where it appears. These cannot be validated by future LINTs. Auto-fix: not possible (requires reading both pages). Report: list affected pages for manual UPDATE.
+
 **Stale insights**
 - Insight pages whose cited source pages (in frontmatter `sources`) have been substantially updated since the insight was created
 - Compare the insight's `updated` date against the `updated` dates of its cited pages

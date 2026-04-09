@@ -1,25 +1,32 @@
 ---
-title: <Descriptive Title>
+title: <insight title>
 type: insight
-tags: [insight, <topic tags>]
-cited: [<wiki page slugs cited in the analysis>]
-sources: []
-updated: <today>
+date: <YYYY-MM-DD>
+sources: [[[page-slug-1]], [[page-slug-2]]]
+status: open | actioned | superseded
 ---
 
-# <Descriptive Title>
+# <Insight Title>
 
-> Point-in-time snapshot. This page captures analysis as of the date above and is NOT updated by subsequent ingests or cascade updates. If cited source pages have changed substantially, consider re-running the query.
+> <1-2 sentence summary of the connection>
 
-## Overview
+## The Connection
 
-<One paragraph summarizing the question and key findings.>
+<Describe the specific pattern, contradiction, or synthesis. Be concrete — cite the exact construct from each source that produces the insight. This is not a summary of either source; it is the thing that only exists because both were read together.>
 
-## Analysis
+## Why It Matters
 
-<The synthesized answer with [[wikilink]] citations for every claim.>
+<Why this connection is non-obvious and what it changes. If it doesn't change anything, it's not an insight — it's a summary.>
+
+## Implications
+
+<What this means for existing wiki pages, decisions, or future work. List pages that may need updating.>
+
+## Open Questions
+
+<What this insight doesn't resolve. What further synthesis would close it.>
 
 ## See Also
 
-- [[<related-concept>]]
-- [[<related-entity>]]
+- [[source-page-1]]
+- [[source-page-2]]
