@@ -29,6 +29,23 @@ After reading the source:
 - Check whether it contradicts anything already in the wiki (read index.md + relevant pages)
 - Proceed to write/update pages based on your assessment
 
+### 3.1 Filter Before Writing
+
+Not every piece of knowledge earns a wiki page. Before writing, apply these three tests to each identified takeaway:
+
+| Test | Question | If fails |
+|------|----------|----------|
+| **Compression** | Would the wiki version be >60% direct restatement of the raw source? | Pointer only — add an index entry linking to the raw file, don't create a summary page |
+| **Connection** | Does this create links to ≥2 existing wiki pages? | Fold into the most relevant existing page rather than creating a new one |
+| **Decay** | Will this be stale in <3 months with no signal to trigger an update? | Log entry or dated annotation, not a standalone page |
+
+**Scoring:**
+- **Passes 0/3** → stays in raw/ with an index pointer. The raw source speaks for itself.
+- **Passes 1/3** → merge into the most relevant existing page. Not enough standalone value.
+- **Passes 2–3/3** → earns a standalone page.
+
+This step is not optional. Include the filter result per-source in your ingest report (Step 10).
+
 **Only ask the user if something is genuinely unclear** — e.g., ambiguous claims, conflicting information where you can't determine which is correct, or domain-specific terms you don't understand. Do not ask for emphasis/de-emphasis on every ingest.
 
 ### 3.5 Optional User Insight Capture
@@ -76,6 +93,8 @@ For each piece of knowledge in the source, determine where it belongs. Apply thi
 - Summaries → `summaries/<slug>.md` using [templates/summary.md](../templates/summary.md)
 - Concepts → `concepts/<slug>.md` using [templates/concept.md](../templates/concept.md)
 - Entities → `entities/<slug>.md` using [templates/entity.md](../templates/entity.md)
+
+**Summary page structure:** When creating a summary page, follow the five-section body format in [templates/summary.md](../templates/summary.md): Essence → Delta → Tensions → Implications → Open Threads. This is not a compression of the source — it is a comparison against what the wiki already knows. Read relevant existing wiki pages before writing.
 
 ### 5. Backlink Audit — Do Not Skip
 
@@ -130,6 +149,7 @@ If the wiki has 50+ pages, update the `_hub.md` file for each category where pag
 - Concept/entity pages created or updated (list)
 - Pages that received backlinks (list)
 - Cascade updates applied or flagged
+- Filter decisions (pages declined or merged, with rationale)
 - User insight applied, if any (list the signals used)
 - Total pages touched
 
