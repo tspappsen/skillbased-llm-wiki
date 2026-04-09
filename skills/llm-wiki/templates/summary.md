@@ -3,6 +3,7 @@ title: <topic>
 type: summary
 tags: [<relevant tags>]
 sources: [raw/<file1>.md, raw/<file2>.md]
+extraction_rationale: "<1-line: why this earns a page — which filter tests it passed>"
 updated: <today>
 ---
 

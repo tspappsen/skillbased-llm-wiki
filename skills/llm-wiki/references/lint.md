@@ -71,6 +71,10 @@ Report these findings without auto-fixing. Let the user decide:
 - Open questions listed in overview.md that could be answered
 - Topics partially covered that need more sources
 
+**Extraction Rationale Audit**
+
+Check summary pages for missing `extraction_rationale` frontmatter. Pages without it predate the filter — flag them for review but don't auto-fix (the rationale requires judgment).
+
 **Stale insights**
 - Insight pages whose cited source pages (in frontmatter `sources`) have been substantially updated since the insight was created
 - Compare the insight's `updated` date against the `updated` dates of its cited pages
