@@ -75,6 +75,10 @@ Report these findings without auto-fixing. Let the user decide:
 
 Check summary pages for missing `extraction_rationale` frontmatter. Pages without it predate the filter — flag them for review but don't auto-fix (the rationale requires judgment).
 
+### Legacy Summary Format
+
+Check summary pages for old-format bodies (pages with `## Key Takeaways` or `## Details` sections instead of `## Essence` / `## Delta`). These predate the extraction frame — flag them for UPDATE but don't auto-rewrite (requires reading existing wiki context to fill Delta and Tensions meaningfully).
+
 **Stale insights**
 - Insight pages whose cited source pages (in frontmatter `sources`) have been substantially updated since the insight was created
 - Compare the insight's `updated` date against the `updated` dates of its cited pages

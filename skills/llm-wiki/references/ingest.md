@@ -94,6 +94,8 @@ For each piece of knowledge in the source, determine where it belongs. Apply thi
 - Concepts → `concepts/<slug>.md` using [templates/concept.md](../templates/concept.md)
 - Entities → `entities/<slug>.md` using [templates/entity.md](../templates/entity.md)
 
+**Summary page structure:** When creating a summary page, follow the five-section body format in [templates/summary.md](../templates/summary.md): Essence → Delta → Tensions → Implications → Open Threads. This is not a compression of the source — it is a comparison against what the wiki already knows. Read relevant existing wiki pages before writing.
+
 ### 5. Backlink Audit — Do Not Skip
 
 Scan ALL existing pages in wiki/ for mentions that should link to newly created or updated pages but don't. Add `[[slug]]` references where appropriate.
