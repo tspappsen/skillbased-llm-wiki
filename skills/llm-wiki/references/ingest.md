@@ -68,7 +68,7 @@ For each candidate entity or concept name from Step 3:
 
 1. Scan `wiki/index.md` for matches in the page slug, title, or Tags column. Match on substring and on simple variants (singular/plural, hyphenated/spaced, with/without prefix words like "Azure" or "Microsoft").
 2. **Large wiki (50+ pages):** also scan the relevant `_hub.md` files (`wiki/entities/_hub.md`, `wiki/concepts/_hub.md`) for the candidate name and its variants. See [scale.md](scale.md).
-3. **With qmd available:** run `qmd search "<candidate>" -c wiki --json -n 5` for higher precision. See [qmd.md](qmd.md).
+3. **With qmd available:** run `qmd --index $IDX search "<candidate>" -c wiki --json -n 5` for higher precision. See [qmd.md](qmd.md).
 4. Classify each candidate as:
    - **Exact existing page** → merge new info into it; no new page
    - **Near-match** → flag for user decision in the Plan output (merge into existing or create new with a disambiguating name)
@@ -180,7 +180,7 @@ After direct operations, identify and update existing pages affected by the new 
 4. Read only those matched pages (~20 page budget)
 5. If more pages potentially match than the budget allows, flag the remainder: "These pages may also be affected — consider running LINT to catch anything missed"
 
-**With qmd available:** run `qmd query "<source thesis in 5-10 words>" -c wiki --json -n 20` to discover affected pages with higher recall than tag overlap alone. Merge results with the tag-scoped list above. See [qmd.md](qmd.md).
+**With qmd available:** run `qmd --index $IDX query "<source thesis in 5-10 words>" -c wiki --json -n 20` to discover affected pages with higher recall than tag overlap alone. Merge results with the tag-scoped list above. See [qmd.md](qmd.md).
 
 For each page read (either method):
 1. Assess whether the new source changes, contradicts, or supplements its content
@@ -240,8 +240,8 @@ If the wiki has 50+ pages, update the `_hub.md` file for each category where pag
 
 If qmd is the active search backend for this repo (see [qmd.md](qmd.md)), re-index now:
 
-- New pages created → `qmd update && qmd embed`
-- Only existing pages modified → `qmd update`
+- New pages created → `qmd --index $IDX update && qmd --index $IDX embed`
+- Only existing pages modified → `qmd --index $IDX update`
 
 Skip this step entirely if qmd is not installed. The skill works without it.
 

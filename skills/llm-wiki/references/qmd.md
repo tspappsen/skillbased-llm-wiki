@@ -20,6 +20,24 @@ This reference is **opt-in**. The skill works without qmd. If qmd is not install
 
 qmd runs entirely on-device. No data leaves the machine. The skill remains markdown-only-by-default; qmd is an enhancement layer for repos where the wiki has outgrown tag-scoped scanning.
 
+### Per-repo index isolation
+
+qmd stores its data in a global SQLite database at `~/.cache/qmd/index.sqlite`. Without isolation, bootstrapping wiki collections in multiple repos would collide on the shared names `wiki` and `raw`.
+
+**Convention:** every qmd command in this skill passes `--index <IDX>` where `<IDX>` is the **lowercased, hyphenated name of the wiki-root folder** (the repo root that contains `wiki/` and `raw/`). Derive it once per operation:
+
+```text
+# PowerShell
+$IDX = (Split-Path -Leaf (Get-Location)).ToLower() -replace '[^a-z0-9]','-'
+
+# Bash / Zsh
+IDX=$(basename "$PWD" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-')
+```
+
+QMD then stores a separate `<IDX>.sqlite` in `~/.cache/qmd/`, giving each repo full isolation — no shared collections, no cross-contamination.
+
+All examples below show the literal flag `--index $IDX`. Substitute the derived value at runtime.
+
 Important distinction:
 
 - `qmd search` is BM25/full-text and does **not** require embeddings or an LLM.
@@ -32,7 +50,7 @@ Important distinction:
 Before using any qmd command, verify it is installed and the wiki collections are registered:
 
 ```text
-qmd status
+qmd --index $IDX status
 ```
 
 Interpret the output:
@@ -45,20 +63,22 @@ Do not assume qmd is available based on prior turns. Detect on each operation th
 
 ## Bootstrap (one-time per repo)
 
-Run this once when the user opts in to qmd for a repo:
+Run this once when the user opts in to qmd for a repo. Derive `$IDX` first (see Per-repo index isolation above):
 
 ```text
-qmd collection add ./wiki --name wiki --mask "**/*.md"
-qmd collection add ./raw  --name raw  --mask "**/*.md"
-qmd embed
-qmd status
+qmd --index $IDX collection add ./wiki --name wiki --mask "**/*.md"
+qmd --index $IDX collection add ./raw  --name raw  --mask "**/*.md"
+qmd --index $IDX embed
+qmd --index $IDX status
 ```
+
+Because `--index $IDX` routes to a dedicated SQLite file, the generic names `wiki` and `raw` are safe — they live inside that repo's private index and cannot collide with another repo's collections.
 
 Notes:
 
 - `wiki` is embedded for hybrid search. `raw` is BM25 only by default — embeddings on raw are usually wasteful since the wiki layer is what answers queries.
-- If the user asks for semantic search over `raw`, run `qmd embed` again after enabling embedding for the raw collection.
-- Verify with `qmd status` that both collections appear and `wiki` shows embedding coverage > 0% after the first wiki page exists.
+- If the user asks for semantic search over `raw`, run `qmd --index $IDX embed` again after enabling embedding for the raw collection.
+- Verify with `qmd --index $IDX status` that both collections appear and `wiki` shows embedding coverage > 0% after the first wiki page exists.
 - A healthy steady-state `qmd status` typically shows non-zero document and vector counts, both `wiki` and `raw` collections, configured model entries, and available device/runtime info.
 - On first run, `qmd embed` may print the embedding model name, download the model into the local qmd cache, and then process document chunks. This is expected.
 - After `qmd collection add`, qmd may report that some number of unique hashes still need vectors. That means lexical indexing succeeded and embedding is the remaining step.
@@ -69,9 +89,9 @@ Pick the right command for the operation:
 
 | Goal | Command |
 |------|---------|
-| Exact term, page slug, or known phrase | `qmd search "<term>" -c wiki --json -n 10` |
-| Conceptual / multi-page synthesis | `qmd query "<question>" -c wiki --json -n 10` |
-| Synonym or paraphrase territory | `qmd vsearch "<phrase>" -c wiki --json -n 10` |
+| Exact term, page slug, or known phrase | `qmd --index $IDX search "<term>" -c wiki --json -n 10` |
+| Conceptual / multi-page synthesis | `qmd --index $IDX query "<question>" -c wiki --json -n 10` |
+| Synonym or paraphrase territory | `qmd --index $IDX vsearch "<phrase>" -c wiki --json -n 10` |
 | Same against raw sources | swap `-c wiki` for `-c raw` |
 
 Defaults by operation:
@@ -86,10 +106,10 @@ Always pass `-c wiki` or `-c raw` explicitly. Never search both blind — the no
 ## Read Commands
 
 ```text
-qmd get wiki/concepts/<slug>.md --full
-qmd get wiki/sources/<slug>.md:50 -l 100
-qmd multi-get "wiki/sources/*.md" -l 200
-qmd multi-get "#abc123,#def456" --full
+qmd --index $IDX get wiki/concepts/<slug>.md --full
+qmd --index $IDX get wiki/sources/<slug>.md:50 -l 100
+qmd --index $IDX multi-get "wiki/sources/*.md" -l 200
+qmd --index $IDX multi-get "#abc123,#def456" --full
 ```
 
 Use `qmd get` instead of direct file reads when you want line-bounded reads or docid-based retrieval. For full-page reads of a known path, direct file read is also acceptable.
@@ -99,8 +119,8 @@ Use `qmd get` instead of direct file reads when you want line-bounded reads or d
 **Required after any write to wiki/.**
 
 ```text
-qmd update     # rebuild BM25 index
-qmd embed      # rebuild vector embeddings using the local embedding model (only when new files were created)
+qmd --index $IDX update     # rebuild BM25 index
+qmd --index $IDX embed      # rebuild vector embeddings using the local embedding model (only when new files were created)
 ```
 
 Order: write all files first, then `qmd update`, then `qmd embed`. Re-indexing mid-stream wastes work.
@@ -132,7 +152,8 @@ Report the qmd failure to the user once, then continue. Do not retry on every op
 ## Rules
 
 - qmd is **never required**. The skill must work in repos without it.
-- Detect with `qmd status` on each operation that touches qmd. Do not cache availability across turns.
+- Detect with `qmd --index $IDX status` on each operation that touches qmd. Do not cache availability across turns.
+- **Always pass `--index $IDX`** on every qmd invocation. This is the isolation boundary.
 - After any write to `wiki/`, re-index. After creating new files, also re-embed.
 - Always pass `-c wiki` or `-c raw` explicitly.
 - For dedup checks (Step 3.2), prefer `qmd search` (precision). For cascade scope (Step 6), prefer `qmd query` (recall).
