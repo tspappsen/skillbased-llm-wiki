@@ -20,6 +20,13 @@ This reference is **opt-in**. The skill works without qmd. If qmd is not install
 
 qmd runs entirely on-device. No data leaves the machine. The skill remains markdown-only-by-default; qmd is an enhancement layer for repos where the wiki has outgrown tag-scoped scanning.
 
+Important distinction:
+
+- `qmd search` is BM25/full-text and does **not** require embeddings or an LLM.
+- `qmd embed` **does** require a local embedding model, because it generates vector representations for semantic retrieval.
+- `qmd query` may additionally use local reranking and query-expansion/generation models, depending on qmd's configuration.
+- In normal usage this is still on-device: model inference runs locally rather than sending content to a hosted service.
+
 ## Detection
 
 Before using any qmd command, verify it is installed and the wiki collections are registered:
@@ -52,6 +59,8 @@ Notes:
 - `wiki` is embedded for hybrid search. `raw` is BM25 only by default — embeddings on raw are usually wasteful since the wiki layer is what answers queries.
 - If the user asks for semantic search over `raw`, run `qmd embed` again after enabling embedding for the raw collection.
 - Verify with `qmd status` that both collections appear and `wiki` shows embedding coverage > 0% after the first wiki page exists.
+- On first run, `qmd embed` may print the embedding model name, download the model into the local qmd cache, and then process document chunks. This is expected.
+- After `qmd collection add`, qmd may report that some number of unique hashes still need vectors. That means lexical indexing succeeded and embedding is the remaining step.
 
 ## Command Selection
 
@@ -90,7 +99,7 @@ Use `qmd get` instead of direct file reads when you want line-bounded reads or d
 
 ```text
 qmd update     # rebuild BM25 index
-qmd embed      # rebuild vector embeddings (only when new files were created)
+qmd embed      # rebuild vector embeddings using the local embedding model (only when new files were created)
 ```
 
 Order: write all files first, then `qmd update`, then `qmd embed`. Re-indexing mid-stream wastes work.
