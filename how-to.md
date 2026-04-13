@@ -108,6 +108,16 @@ Pass criteria:
 - embedding coverage for `wiki` becomes non-zero once wiki pages exist
 - `qmd embed` completes without model/runtime errors and reports embedded chunks/documents
 
+What a healthy `qmd status` usually shows after bootstrap:
+
+- a non-zero `Documents > Total`
+- a non-zero `Documents > Vectors`
+- both `wiki` and `raw` listed under `Collections`
+- model entries under `Models` for Embedding, Reranking, and Generation
+- device/runtime information under `Device`
+
+In other words, `qmd status` should move from "installed but not bootstrapped" to "collections present, vectors built, models known, runtime available".
+
 ## Test 3: query-mode selection
 
 Verify that the skill chooses the right `qmd` command for the task.
@@ -253,6 +263,7 @@ Practical interpretation:
 - if `qmd embed` works, the embedding model path/runtime is fine
 - if `qmd query` works well, the broader hybrid stack is working, including reranking/query expansion where applicable
 - if `qmd collection add` reports `N unique hashes need vectors`, that is the handoff signal telling you BM25 indexing is done but semantic embeddings still need to be built
+- if `qmd status` later shows non-zero indexed files and vectors plus the `wiki` collection, the repo is in the ready state for qmd-backed wiki operations
 
 ## Definition of done
 

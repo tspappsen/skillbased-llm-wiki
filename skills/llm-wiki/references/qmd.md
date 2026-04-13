@@ -39,7 +39,7 @@ Interpret the output:
 
 - **Command not found** → qmd is not installed in this repo. Fall back to [scale.md](scale.md). Do not propose installing qmd unless the user asks.
 - **Command runs, no `wiki` collection** → qmd is installed but not bootstrapped for this repo. Run the Bootstrap procedure below.
-- **Command runs, `wiki` collection present, embedding coverage shown** → ready to use.
+- **Command runs, `wiki` collection present, non-zero vectors/documents shown** → ready to use.
 
 Do not assume qmd is available based on prior turns. Detect on each operation that touches qmd.
 
@@ -59,6 +59,7 @@ Notes:
 - `wiki` is embedded for hybrid search. `raw` is BM25 only by default — embeddings on raw are usually wasteful since the wiki layer is what answers queries.
 - If the user asks for semantic search over `raw`, run `qmd embed` again after enabling embedding for the raw collection.
 - Verify with `qmd status` that both collections appear and `wiki` shows embedding coverage > 0% after the first wiki page exists.
+- A healthy steady-state `qmd status` typically shows non-zero document and vector counts, both `wiki` and `raw` collections, configured model entries, and available device/runtime info.
 - On first run, `qmd embed` may print the embedding model name, download the model into the local qmd cache, and then process document chunks. This is expected.
 - After `qmd collection add`, qmd may report that some number of unique hashes still need vectors. That means lexical indexing succeeded and embedding is the remaining step.
 
