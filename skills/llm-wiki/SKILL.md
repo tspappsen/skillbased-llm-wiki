@@ -21,6 +21,7 @@ Infer **intent** from the user’s message (bootstrap, ingest, answer from the w
 - If it exists: skim `wiki/index.md`, tail `wiki/log.md`, and inspect `raw/` when ingest, drift, or new sources matter.
 - Treat raw drift as filename inventory only: compare top-level files in `raw/` against `raw/files.log` for `new` and `deleted` entries only.
 - If uncertain about the wiki tree or `raw/files.log`, read the dedicated references in this skill before proceeding.
+- For **INGEST**, the loop is explicitly **Plan → Do → Check → Act** with a hard stop after Plan to present the proposal and wait for user go-ahead. See [references/ingest.md](references/ingest.md).
 
 ### 2. Map intention to one or more steps
 
@@ -35,6 +36,7 @@ Decompose the request into an **ordered list of steps**. Each step = a single pr
 | **LINT** | “Lint”, health check, gaps, inconsistencies, optional raw vs `files.log` drift | [references/lint.md](references/lint.md) |
 | **RAW TRACKING** | Any step that inspects, syncs, or reconciles `raw/files.log` | [references/raw-tracking.md](references/raw-tracking.md) |
 | **SCALE** | Wiki has 50+ pages; need tiered reads, hubs, or scoped cascades | [references/scale.md](references/scale.md) |
+| **QMD** *(optional)* | Wiki has 200+ pages or user opts in to local hybrid search; check with `qmd status` | [references/qmd.md](references/qmd.md) |
 
 One message can imply several steps (e.g. INGEST then LINT). Order them sensibly—often INIT first if missing, then INGEST / UPDATE / QUERY, and LINT when checking health after substantive changes.
 
@@ -45,6 +47,7 @@ wiki/index.md + wiki/log.md present at wiki root?
 ├─ No → INIT → references/init.md
 ├─ Yes →
 │   ├─ 50+ pages in index.md? → read references/scale.md before any operation below
+│   ├─ qmd installed AND 200+ pages? → also read references/qmd.md (accelerates INGEST cascade and QUERY recall)
 │   ├─ New/changed raw/, or paste/URL to capture? → INGEST → references/ingest.md
 │   ├─ Domain question grounded in the wiki? → QUERY → references/query.md
 │   ├─ "lint" / health check / find gaps? → LINT → references/lint.md
@@ -125,13 +128,14 @@ Common rules:
 1. **LLM writes wiki; human curates sources and asks questions**
 2. **raw/ is immutable** — never modify
 3. **Log and index only on wiki/ file changes** — no-op queries don't write anything
-4. **Ask only when uncertainty or user context matters** — proceed autonomously; escalate when facts are ambiguous, sources conflict, a change would alter meaning, or 1-3 brief user answers would materially improve curation during ingest
+4. **Ask only when uncertainty or user context matters** — proceed autonomously; escalate when facts are ambiguous, sources conflict, a change would alter meaning, or 1-3 brief user answers would materially improve  duration during ingest. Exception: INGEST requires one explicit Plan checkpoint per source (see Step 3.9).
 5. **Pages are not bound to raw files** — LLM determines relevance across the entire wiki
 6. **Backlink audit on every ingest** — scan all pages for missing links to new content
 7. **Insights are snapshots** — not cascade-updated; add reverse links in See Also (Obsidian backlinks invisible to LLM)
 8. **Schema co-evolves** — suggest AGENTS.md changes; user confirms; log records
 9. **Keep `raw/files.log` correct** using [references/raw-tracking.md](references/raw-tracking.md)
 10. **Scale with tiered reads** — at 50+ pages, use index tags and hub summaries instead of full scans; see [references/scale.md](references/scale.md)
+11. **Dedup before creating** — before proposing any new entity or concept page during ingest, check for near-matches in `index.md` (and category hubs at scale, or via qmd if installed). Silent duplicate pages with name variants are the dominant compounding-wiki failure mode. Enforced as INGEST Step 3.2.
 
 ## Tips for Users
 
